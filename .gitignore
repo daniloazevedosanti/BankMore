@@ -1,0 +1,92 @@
+﻿## Build
+bin/
+obj/
+out/
+debug/
+release/
+x64/
+x86/
+[Aa]pp_Data/
+*.exe
+*.dll
+*.pdb
+*.cache
+*.log
+*.vspscc
+*.vssscc
+*.user
+*.suo
+*.tmp
+*.dbmdl
+*.bak
+*.ldf
+*.mdf
+*.ndf
+*.psess
+*.vsp
+*.vsmdi
+*.testsettings
+*.coverage
+*.coveragexml
+
+## VS / Rider / Code
+.vs/
+.idea/
+.vscode/
+
+## Configs e secrets
+appsettings.Development.json
+appsettings.Local.json
+secrets.json
+
+## Pacotes
+*.nupkg
+*.snupkg
+*.nuspec
+packages/
+!**/packages/build/
+!**/packages/repositories.config
+
+## Cache / Logs
+*.svclog
+*.scc
+*.psess
+*.vsp
+*.pidb
+*.scc
+*.cache
+*.log
+*.msscci
+*.opendb
+*.db
+*.tgz
+*.DS_Store
+
+## Test / Coverage
+TestResults/
+*.TestResults/
+*.trx
+*.coverage
+*.coveragexml
+coverage/
+coveragereport/
+
+## Docker
+docker-compose.override.yml
+*.dockerfile.swp
+docker-compose.*.yml
+*.env
+.env.local
+
+## Node / Frontend (se tiver)
+node_modules/
+dist/
+npm-debug.log
+yarn-error.log
+
+## Outros
+_ReSharper*/
+*.resharper
+*.DotSettings.user
+*.sln.iml
+*.ncrunchsolution*
