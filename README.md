@@ -106,6 +106,133 @@ dotnet test
  Monitoramento e métricas com Prometheus/Grafana
  Pipeline CI/CD com GitHub Actions
 
+### 🧪 Roteiro de Testes
+1. Criar contas
+
+Endpoint: POST /account/register (AccountService)
+
+Body:
+```bash
+{
+  "cpf": "12345678909",
+  "nome": "João",
+  "senha": "123"
+}
+```
+
+Esperado:
+HTTP 201
+Conta criada no banco
+Retornar idContaCorrente
+Repita para criar outra conta (destino da transferência).
+
+2. Login
+
+Endpoint: POST /account/login
+
+Body:
+```bash
+{
+  "cpf": "12345678909",
+  "senha": "123"
+}
+```
+
+Esperado:
+HTTP 200
+Retorna token JWT
+Guarde esse token para as próximas chamadas.
+
+3. Fazer depósito inicial
+
+Endpoint: POST /account/movement
+Header: Authorization: Bearer {token}
+
+Body:
+```bash
+{
+  "idRequisicao": "req-dep1",
+  "tipo": "C",
+  "valor": 1000
+}
+```
+Esperado:
+HTTP 204
+Saldo da conta atualizado
+
+
+4. Consultar saldo
+
+Endpoint: GET /account/balance
+Header: Authorization: Bearer {token}
+
+Esperado:
+HTTP 200
+Retorna saldo >= 1000
+
+5. Fazer transferência
+
+Endpoint: POST /transfer
+Header: Authorization: Bearer {token}
+
+Body:
+```bash
+{
+  "idRequisicao": "req-transf1",
+  "idContaOrigem": "{conta_origem_id}",
+  "idContaDestino": "{conta_destino_id}",
+  "valor": 100
+}
+```
+
+Esperado:
+HTTP 204
+
+Evento enviado para o Kafka no tópico transfers
+TariffService consome e publica evento tariffs
+AccountService consome tariffs e debita tarifa automaticamente
+
+6. Validar tarifação automática
+
+Endpoint: GET /account/balance
+Header: Authorization: Bearer {token}
+
+Esperado:
+Saldo = 1000 - 100 (transferência) - tarifa (ex.: 2.0)
+
+7. Verificar Kafka (opcional)
+
+Se tiver Kafka UI:
+Acesse http://localhost:8085
+
+Veja tópicos:
+transfers
+tariffs
+Confirme que eventos foram publicados.
+
+8. Testar idempotência
+
+Repita a mesma chamada de POST /transfer com mesmo idRequisicao.
+
+Esperado:
+HTTP 204
+Nenhuma transferência duplicada
+Nenhuma tarifa duplicada
+
+9. Testes de falha
+
+Tente transferir valor maior que saldo
+Tente logar com senha errada
+Tente acessar endpoint sem token
+Esperado: mensagens de erro adequadas.
+
+### 🧰 Testes Automatizados (xUnit)
+
+Você pode rodar:
+```bash
+dotnet test tests/IntegrationTests
+```
+
 ### 📝 Licença
 
 Este projeto é apenas para fins educacionais/demonstração.
